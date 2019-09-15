@@ -1,0 +1,36 @@
+{
+  "name": "asar-class-api",
+  "version": "0.0.1",
+  "description": "asar class api",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toyobayashi/asar-class-api.git"
+  },
+  "keywords": [
+    "asar"
+  ],
+  "author": "toyobayashi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/toyobayashi/asar-class-api/issues"
+  },
+  "homepage": "https://github.com/toyobayashi/asar-class-api#readme",
+  "dependencies": {
+    "asar": "^2.0.1",
+    "chromium-pickle-js": "^0.2.0",
+    "cuint": "^0.2.2",
+    "fs-extra": "^8.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.4.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  }
+}
