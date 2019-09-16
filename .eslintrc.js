@@ -5,6 +5,7 @@ module.exports = {
   },
   extends: ['standard-with-typescript'],
   rules: {
+    '@typescript-eslint/promise-function-async': 'off',
     '@typescript-eslint/no-unused-vars': 'error'
   },
   parserOptions: {

@@ -9,6 +9,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "es2018",
-    "module": "commonjs"
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "./out"
   }
 }

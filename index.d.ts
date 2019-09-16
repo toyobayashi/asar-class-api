@@ -11,7 +11,9 @@ declare class Asar {
   constructor (src: string, headerSize: number)
   constructor (src: string, headerSize: number, fileSize: number)
   constructor (src: string, headerSize: number, fileSize: number, header: Asar.AsarNodeDirectory)
+  constructor (src: string, headerSize: number, fileSize: number, header: Asar.AsarNodeDirectory, tmp: string)
 
+  getTempDir (): string
   isOpened (): boolean
   close (): void
   open (asarPath?: string): void
@@ -22,7 +24,7 @@ declare class Asar {
   getNodeSize (path: string): number
 
   getHeaderSize (): number
-  getHeader (copy: boolean): Asar.AsarNodeDirectory
+  getHeader (copy?: boolean): Asar.AsarNodeDirectory
   getNode (...path: string[]): Asar.AsarNode | null
   copyNode (...path: string[]): Asar.AsarNode | null
   existsSync (...path: string[]): boolean
@@ -42,6 +44,11 @@ declare class Asar {
   asyncWalk (callback?: (node: Asar.AsarNode, path: string) => any, path?: string): Promise<void>
   extract (path: string, dest: string, onProgress?: (progress: Asar.ExtractProgress) => void): Promise<void>
 
+  write (path: string, src: string, isUnpack?: boolean): Promise<void>
+  erase (path: string): Promise<void>
+  unpack (paths: string[]): Promise<void>
+  list (): string[]
+
   static open (asarPath: string): Asar
   static validate (node: any): boolean
   static getNode (rootNode: Asar.AsarNodeDirectory, ...path: string[]): Asar.AsarNode | null
@@ -53,6 +60,7 @@ declare class Asar {
   static walk (rootNode: Asar.AsarNodeDirectory, callback?: (node: Asar.AsarNode, path: string) => any, path?: string): void
   static asyncWalk (rootNode: Asar.AsarNodeDirectory, callback?: (node: Asar.AsarNode, path: string) => any, path?: string): Promise<void>
   static pack (path: string, target: string, options?: Asar.PackOptions): Promise<Asar.IAsar>
+  static list (node: Asar.AsarNodeDirectory): string[]
 }
 
 declare namespace Asar {
@@ -77,6 +85,7 @@ declare namespace Asar {
     fileSize: number
     headerSize: number
     header: AsarNodeDirectory
+    tmp: string
   }
 
   export interface IAsarNullable {
@@ -84,6 +93,7 @@ declare namespace Asar {
     fileSize?: number
     headerSize?: number
     header?: AsarNodeDirectory
+    tmp?: string
   }
 
   export interface ExtractProgress {
