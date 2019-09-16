@@ -1,11 +1,16 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable no-dupe-class-members */
+
+import 'node'
+
 declare class Asar {
-  constructor (): Asar
-  constructor (asar: Asar.IAsarNullable): Asar
-  constructor (asar: Asar): Asar
-  constructor (src: string): Asar
-  constructor (src: string, headerSize: number): Asar
-  constructor (src: string, headerSize: number, fileSize: number): Asar
-  constructor (src: string, headerSize: number, fileSize: number, header: AsarNodeDirectory): Asar
+  constructor ()
+  constructor (asar: Asar.IAsarNullable)
+  constructor (asar: Asar)
+  constructor (src: string)
+  constructor (src: string, headerSize: number)
+  constructor (src: string, headerSize: number, fileSize: number)
+  constructor (src: string, headerSize: number, fileSize: number, header: Asar.AsarNodeDirectory)
 
   isOpened (): boolean
   close (): void
@@ -35,7 +40,7 @@ declare class Asar {
 
   walk (callback?: (node: Asar.AsarNode, path: string) => any, path?: string): void
   asyncWalk (callback?: (node: Asar.AsarNode, path: string) => any, path?: string): Promise<void>
-  extract (path: string, dest: string, onProgress?: (progress: ExtractProgress) => void): Promise<void>
+  extract (path: string, dest: string, onProgress?: (progress: Asar.ExtractProgress) => void): Promise<void>
 
   static open (asarPath: string): Asar
   static validate (node: any): boolean

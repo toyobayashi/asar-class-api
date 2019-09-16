@@ -1,5 +1,5 @@
 node_modules
 /test/*
 !/test/electron.asar
-!/test/index.js
+!/test/index.ts
 /package-lock.json
