@@ -1,5 +1,6 @@
-const { openSync, readSync, closeSync, statSync, createReadStream, createWriteStream, existsSync, mkdirsSync, symlink, copy, remove, rename, readFileSync, readFile } = require('fs-extra')
-const { join, sep, basename, dirname } = require('path')
+const { openSync, readSync, closeSync, lstatSync, createReadStream, createWriteStream, existsSync, symlink, readFileSync, readFile, unlink, unlinkSync, renameSync } = process.versions.electron ? require('original-fs') : require('fs-extra')
+const { mkdirsSync, copy, remove } = require('fs-extra')
+const { join, sep, basename, dirname, relative } = require('path')
 const { createFromBuffer } = require('chromium-pickle-js')
 const { createPackageWithOptions } = require('asar')
 const { tmpdir } = require('os')
@@ -50,16 +51,13 @@ class Asar {
 
   close () {
     if (this._fd === null) {
+      _asarInit.call(this, this._src)
       return
     }
     try {
       closeSync(this._fd)
-      if (this._tmp && existsSync(this._tmp)) {
-        const tmp = this._tmp
-        remove(this._tmp).catch(() => {
-          console.log(`Remove cache failed: ${tmp}`)
-        })
-      }
+      const tmp = this._tmp
+      remove(tmp)
     } catch (err) {
       throw new Error(`Close file failed: ${this._src}`)
     }
@@ -267,14 +265,21 @@ class Asar {
     }
 
     if (node.link) {
-      const target = node.link
       return new Promise((resolve, reject) => {
-        const stat = statSync(target)
-        symlink(target, target, stat.isDirectory() ? 'dir' : 'file', (err) => {
-          if (err) {
-            reject(err)
-          }
-          resolve()
+        const destFilename = join(dest, path)
+
+        const linkSrcPath = dirname(join(dest, node.link))
+        const linkDestPath = dirname(destFilename)
+        const relativePath = relative(linkDestPath, linkSrcPath)
+
+        unlink(destFilename, () => {
+          const linkTo = join(relativePath, basename(node.link))
+          symlink(linkTo, destFilename, (err) => {
+            if (err) {
+              reject(err)
+            }
+            resolve()
+          })
         })
       })
     }
@@ -507,7 +512,7 @@ function _readInfo () {
   }
 
   try {
-    this._fileSize = statSync(this._src).size
+    this._fileSize = lstatSync(this._src).size
   } catch (err) {
     throw new Error('Read file size failed.')
   }
@@ -529,7 +534,7 @@ async function _repack (fn, unpack) {
       const item = unpack[i]
       let stat = null
       try {
-        stat = statSync(join(this._tmp, item))
+        stat = lstatSync(join(this._tmp, item))
       } catch (_err) {}
 
       if (stat) {
@@ -555,12 +560,15 @@ async function _repack (fn, unpack) {
   await Asar.pack(this._tmp, packTmp, options)
   await remove(`${this._src}.unpacked`)
   if (existsSync(`${packTmp}.unpacked`)) {
-    await rename(`${packTmp}.unpacked`, `${this._src}.unpacked`)
+    renameSync(`${packTmp}.unpacked`, `${this._src}.unpacked`)
   }
 
   closeSync(this._fd)
-  await remove(this._src)
-  await rename(packTmp, this._src)
+  try {
+    unlinkSync(this._src)
+  } catch (err) {}
+
+  renameSync(packTmp, this._src)
   this._fd = openSync(this._src)
   _readInfo.call(this)
 }
