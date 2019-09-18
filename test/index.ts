@@ -4,6 +4,7 @@ import * as fs from 'fs-extra'
 import * as assert from 'assert'
 import { join } from 'path'
 import * as Asar from '../index'
+import { pack } from '../lib/asar'
 
 const origin = join(__dirname, 'electron.asar')
 const repack = join(__dirname, 'repack.asar')
@@ -14,7 +15,9 @@ describe('Asar', function () {
     this.timeout(Infinity)
     const ignore = [
       'electron.asar',
-      'index.ts'
+      'index.ts',
+      'test',
+      'test.asar'
     ]
     await Promise.all(fs.readdirSync(__dirname).map(s => {
       if (ignore.indexOf(s) === -1) {
@@ -94,6 +97,14 @@ describe('Asar', function () {
     assert.ok(asar.getNode('./renderer/extensions') === null)
     // await asar.extract('.', join(__dirname, 'electron_asar_erase_unpack'))
     // assert.ok(!fs.existsSync(join(__dirname, 'electron_asar_erase_unpack', 'renderer/extensions')))
+    asar.close()
+  })
+
+  it('symlink', async function () {
+    this.timeout(Infinity)
+    await pack(join(__dirname, 'test'), join(__dirname, 'test3.asar'))
+    const asar = Asar.open(join(__dirname, 'test3.asar'))
+    await asar.extract('.', join(__dirname, 'test3'))
     asar.close()
   })
 })

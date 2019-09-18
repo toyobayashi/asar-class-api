@@ -70,12 +70,13 @@ declare namespace Asar {
     }
   }
 
-  export interface AsarNodeFile {
+  export type AsarNodeFile = {
     size: number
     offset: string
     unpacked?: boolean
     executable?: boolean
-    link?: string
+  } | {
+    link: string
   }
 
   export type AsarNode = AsarNodeDirectory | AsarNodeFile

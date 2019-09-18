@@ -265,6 +265,11 @@ class Asar {
     }
 
     if (node.link) {
+      if (process.platform === 'win32') {
+        await this.extract(node.link, dest, onProgress)
+        renameSync(join(dest, basename(node.link)), target)
+        return
+      }
       return new Promise((resolve, reject) => {
         const destFilename = join(dest, path)
 
@@ -479,7 +484,7 @@ Asar.list = function (node) {
   const res = []
   Asar.walk(node, (_n, path) => {
     res.push(path.replace(/\\/g, '/'))
-  })
+  }, '/')
   return res
 }
 
