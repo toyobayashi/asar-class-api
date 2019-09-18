@@ -266,7 +266,7 @@ class Asar {
 
     if (node.link) {
       if (process.platform === 'win32') {
-        await this.extract(node.link, dest, onProgress)
+        await this.extract(node.link, dest)
         renameSync(join(dest, basename(node.link)), target)
         return
       }
