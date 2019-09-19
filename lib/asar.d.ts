@@ -66,6 +66,10 @@ declare class Asar {
   static pack (src: string, dest: string, unpack: RegExp | string | string[], onProgress: (progress: Asar.PackProgress) => void): Promise<Asar.IAsar>
 
   static list (node: Asar.AsarNodeDirectory): string[]
+
+  static enableNodeModulesAsar (root: string, force?: boolean): void
+  static isNodeModulesAsarEnabled (): boolean
+  static getNodeModuleAsarPath (): string
 }
 
 declare namespace Asar {
