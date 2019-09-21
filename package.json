@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/toyobayashi/asar-class-api#readme",
   "dependencies": {
+    "@tybys/oid": "^1.0.4",
     "chromium-pickle-js": "^0.2.0",
     "cuint": "^0.2.2",
     "fs-extra": "^8.1.0"
