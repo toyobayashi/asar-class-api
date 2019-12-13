@@ -42,6 +42,7 @@ declare class Asar {
 
   walk (callback?: (node: Asar.AsarNode, path: string) => any, path?: string): void
   asyncWalk (callback?: (node: Asar.AsarNode, path: string) => any, path?: string): Promise<void>
+  extractTemp (path: string, onProgress?: (progress: Asar.ExtractProgress) => void): Promise<void>
   extract (path: string, dest: string, onProgress?: (progress: Asar.ExtractProgress) => void): Promise<void>
 
   write (path: string, src: string, isUnpack?: boolean): Promise<void>
