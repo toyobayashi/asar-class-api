@@ -14,6 +14,7 @@ declare class Asar {
   constructor (src: string, headerSize: number, fileSize: number, header: Asar.AsarNodeDirectory, tmp: string)
 
   getTempDir (): string
+  getTempPath (path: string): string
   isOpened (): boolean
   close (): void
   open (asarPath?: string): void
